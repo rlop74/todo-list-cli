@@ -1,0 +1,4 @@
+cleansleepeatgym
+box
+sleep
+eat

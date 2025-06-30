@@ -9,8 +9,19 @@ while True:
 
     match user_action:
         case "add":
-            todo = input("Enter a todo: ")
+            todo = input("Enter a todo: ") + "\n"
+            
+            # open the txt file to save its contents
+            file = open("todos.txt", "r")
+            todos = file.readlines() #stores contents in a list
             todos.append(todo)
+            file.close()
+
+            # overwrite txt file with the added todo
+            file = open("todos.txt", "w")
+            file.writelines(todos)
+            file.close()
+
         case "show":
             for index, item in enumerate(todos):
                 print(f"{index + 1}-{item}")
