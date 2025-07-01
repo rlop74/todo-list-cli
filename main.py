@@ -4,8 +4,8 @@ todos = []
 # while loop for managing todos
 while True:
     user_action = input("Type add, show, edit, complete or exit: ")
-    user_action = user_action.strip()
-    user_action = user_action.lower()
+    user_action = user_action.strip() # in case the user accidentally enters a space before or after the input
+    user_action = user_action.lower() # in case the user enters an uppercase letter
 
     match user_action:
         case "add":
@@ -23,6 +23,11 @@ while True:
             file.close()
 
         case "show":
+            file = open("todos.txt", "r")  # open todos.txt in read mode
+            todos = todos.readlines() # .readlines() will return a list
+            file.close()
+
+            # loop through the list and print the concatenated index-item name
             for index, item in enumerate(todos):
                 print(f"{index + 1}-{item}")
         case "edit":

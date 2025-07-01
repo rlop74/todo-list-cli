@@ -2,3 +2,6 @@ cleansleepeatgym
 box
 sleep
 eat
+sleep
+code
+gym
