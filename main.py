@@ -13,9 +13,11 @@ while True:
             
             # open the txt file to save its contents
             file = open("todos.txt", "r")
-            todos = file.readlines() #stores contents in a list
-            todos.append(todo)
+            todos = file.readlines() # returns list value, store in todos
             file.close()
+            
+            # add new todo
+            todos.append(todo)
 
             # overwrite txt file with the added todo
             file = open("todos.txt", "w")
@@ -23,12 +25,14 @@ while True:
             file.close()
 
         case "show":
-            file = open("todos.txt", "r")  # open todos.txt in read mode
-            todos = todos.readlines() # .readlines() will return a list
+            # open txt file and save contents in todos (returns list)
+            file = open("todos.txt", "r")
+            todos = file.readlines()
             file.close()
 
             # loop through the list and print the concatenated index-item name
             for index, item in enumerate(todos):
+                item = item.strip("\n") # remove extra \n
                 print(f"{index + 1}-{item}")
         case "edit":
             number = int(input("Number of the todo you want to edit: "))
