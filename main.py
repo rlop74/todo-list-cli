@@ -12,23 +12,24 @@ while True:
             todo = input("Enter a todo: ") + "\n"
             
             # open the txt file to save its contents
-            file = open("todos.txt", "r")
-            todos = file.readlines() # returns list value, store in todos
-            file.close()
+            with open("todos.txt", "r") as file:
+                todos = file.readlines() # returns list value, store in todos
             
             # add new todo
             todos.append(todo)
 
             # overwrite txt file with the added todo
-            file = open("todos.txt", "w")
-            file.writelines(todos)
-            file.close()
+            with open("todos.txt", "w") as file:
+                file.writelines(todos)
 
         case "show":
             # open txt file and save contents in todos (returns list)
             file = open("todos.txt", "r")
             todos = file.readlines()
             file.close()
+
+            # accomplish the same thing for removing extra \n, but using list comprehension
+            # new_todos = [item.strip("\n") for item in todos]
 
             # loop through the list and print the concatenated index-item name
             for index, item in enumerate(todos):
