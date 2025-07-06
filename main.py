@@ -7,44 +7,67 @@ while True:
     user_action = user_action.strip() # in case the user accidentally enters a space before or after the input
     user_action = user_action.lower() # in case the user enters an uppercase letter
 
-    match user_action:
-        case "add":
-            todo = input("Enter a todo: ") + "\n"
-            
-            # open the txt file to save its contents
-            with open("todos.txt", "r") as file:
-                todos = file.readlines() # returns list value, store in todos
-            
-            # add new todo
-            todos.append(todo)
+    if "add" in user_action:
+        todo = user_action[4:]
+        
+        # open the txt file to save its contents
+        with open("todos.txt", "r") as file:
+            todos = file.readlines() # returns list value, store in todos
+        
+        # add new todo
+        todos.append(todo)
 
-            # overwrite txt file with the added todo
-            with open("todos.txt", "w") as file:
-                file.writelines(todos)
+        # overwrite txt file with the added todo
+        with open("todos.txt", "w") as file:
+            file.writelines(todos)
 
-        case "show":
-            # open txt file and save contents in todos (returns list)
-            file = open("todos.txt", "r")
+    elif "show" in user_action:
+        # open txt file and save contents in todos (returns list)
+        with open("todos.txt", "r") as file:
             todos = file.readlines()
-            file.close()
 
-            # accomplish the same thing for removing extra \n, but using list comprehension
-            # new_todos = [item.strip("\n") for item in todos]
+        # remove extra \n using list comprehension
+        # new_todos = [item.strip("\n") for item in todos]
 
-            # loop through the list and print the concatenated index-item name
-            for index, item in enumerate(todos):
-                item = item.strip("\n") # remove extra \n
-                print(f"{index + 1}-{item}")
-        case "edit":
-            number = int(input("Number of the todo you want to edit: "))
-            number = number - 1
-            new_todo = input("What would you like to change it to? ")
-            todos[number] = new_todo
-        case "complete":
-            number = int(input("Number of the todo you want to complete: "))
-            todos.pop(number - 1)
-        case "exit":
-            break
-        case _:
-            print("Unknown command")
+        # loop through the list and print the concatenated index-item name
+        for index, item in enumerate(todos):
+            item = item.strip("\n") # remove extra \n
+            print(f"{index + 1}-{item}")
+
+    elif "edit" in user_action:
+        # get user input
+        number = int(user_action[5:])
+        number = number - 1
+        new_todo = input("What would you like to change it to? ")
+
+        # open file in read mode
+        with open("todos.txt", "r") as file:
+            todos = file.readlines()
+        
+        todos[number] = new_todo + "\n"
+        
+        # open file in write mode and edit todo
+        with open("todos.txt", "w") as file:
+            file.writelines(todos)
+
+    elif "complete" in user_action:
+        number = int(user_action[9:])
+        
+        with open("todos.txt", "r") as f:
+            todos = f.readlines()
+
+        removed_todo = todos.pop(number - 1)
+        
+        with open("todos.txt", "w") as f:
+            f.writelines(todos)
+
+        message = f"{removed_todo.strip("\n")} was removed from the list."
+        print(message)
+
+    elif "exit" in user_action:
+        break
+
+    else:
+        print("Command is not valid.")
+
 print("Bye!")

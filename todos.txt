@@ -1,11 +1,3 @@
 code
 gym
 sleep
-code again
-gym again
-sleep again
-code
-gym
-sleep
-code
-namim
