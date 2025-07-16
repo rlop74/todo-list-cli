@@ -1,5 +1,5 @@
-# storage of todos
-todos = [] 
+# from functions import get_todos, write_todos
+import functions
 
 # while loop for managing todos
 while True:
@@ -7,25 +7,23 @@ while True:
     user_action = user_action.strip() # in case the user accidentally enters a space before or after the input
     user_action = user_action.lower() # in case the user enters an uppercase letter
 
-    if "add" in user_action:
+    if user_action.startswith("add"):
         todo = user_action[4:]
         
-        # open the txt file to save its contents
-        with open("todos.txt", "r") as file:
-            todos = file.readlines() # returns list value, store in todos
+        # open the txt file to save its contents using get_todos() function
+        todos = functions.get_todos()
+        
         
         # add new todo
-        todos.append(todo)
+        todos.append(todo + "\n")
 
         # overwrite txt file with the added todo
-        with open("todos.txt", "w") as file:
-            file.writelines(todos)
+        functions.write_todos(todos)
 
-    elif "show" in user_action:
+    elif user_action.startswith("show"):
         # open txt file and save contents in todos (returns list)
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
-
+        todos = functions.get_todos()
+        
         # remove extra \n using list comprehension
         # new_todos = [item.strip("\n") for item in todos]
 
@@ -34,37 +32,45 @@ while True:
             item = item.strip("\n") # remove extra \n
             print(f"{index + 1}-{item}")
 
-    elif "edit" in user_action:
-        # get user input
-        number = int(user_action[5:])
-        number = number - 1
-        new_todo = input("What would you like to change it to? ")
+    elif user_action.startswith("edit"):
+        # handle the error in case user enters a string
+        try: 
+            # get user input
+            number = int(user_action[5:])
+            number = number - 1
+            new_todo = input("What would you like to change it to? ")
 
-        # open file in read mode
-        with open("todos.txt", "r") as file:
-            todos = file.readlines()
-        
-        todos[number] = new_todo + "\n"
-        
-        # open file in write mode and edit todo
-        with open("todos.txt", "w") as file:
-            file.writelines(todos)
+            # open file in read mode
+            todos = functions.get_todos()
+            
+            todos[number] = new_todo + "\n"
+            
+            # open file in write mode and edit todo
+            functions.write_todos(todos)
 
-    elif "complete" in user_action:
-        number = int(user_action[9:])
-        
-        with open("todos.txt", "r") as f:
-            todos = f.readlines()
+        except ValueError:
+            print("Please enter the todo number")
 
-        removed_todo = todos.pop(number - 1)
-        
-        with open("todos.txt", "w") as f:
-            f.writelines(todos)
+    elif user_action.startswith("complete"):
+        try:
+            number = int(user_action[9:])
+            
+            todos = functions.get_todos()
 
-        message = f"{removed_todo.strip("\n")} was removed from the list."
-        print(message)
+            removed_todo = todos.pop(number - 1)
+            
+            functions.write_todos(todos)
 
-    elif "exit" in user_action:
+            message = f"{removed_todo.strip("\n")} was removed from the list."
+            print(message)
+        except IndexError:
+            print("The number you entered is out of range")
+            continue
+        except ValueError:
+            print("Please enter the todo number")
+            continue
+
+    elif user_action.startswith("exit"):
         break
 
     else:
